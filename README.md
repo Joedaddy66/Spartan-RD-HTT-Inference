@@ -57,4 +57,4 @@ pip install -r requirements.txt
 
 Wet Lab Partners, Strategic Investors, and Pharma Partnerships.
 
-Contact: [Your Email Here]
+Contact: [JPurvis6691@gmail.com]
