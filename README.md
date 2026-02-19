@@ -58,3 +58,24 @@ pip install -r requirements.txt
 Wet Lab Partners, Strategic Investors, and Pharma Partnerships.
 
 Contact: [JPurvis6691@gmail.com]
+
+## Development
+
+### Running Tests Locally
+
+```bash
+# Quick smoke test
+python analyze.py --input test_smoke.csv --output test_results.csv
+
+# Verify results
+python -c "import pandas as pd; print(pd.read_csv('test_results.csv'))"
+```
+
+### CI Pipeline
+
+This repository uses GitHub Actions for continuous integration:
+- **Smoke tests** run on every push and PR
+- **Multi-version testing** (Python 3.8, 3.9, 3.10, 3.11)
+- **Code quality checks** with flake8 and black
+
+See `.github/workflows/ci.yml` for details.
