@@ -1,9 +1,7 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import math
 import sympy as sp
 import re
-import sys
 from typing import Tuple
 
 BASE4 = {"A": 0, "C": 1, "G": 2, "T": 3}
@@ -29,68 +27,26 @@ def fingerprint(p: int, q: int) -> float:
     a = (p + q) / 2
     m = p * q
     delta = abs(p - q)
-    if a <= 1:
-        return 0.0
-    lam = delta**2 / (m * math.log(a))
-    return lam
+    if a <= 1: return 0.0
+    return delta**2 / (m * math.log(a))
 
-def analyze_sequence_for_score(seq: str, step: int = 1, pam: str = 'NGG') -> float:
-    pam_re = re.compile(f"^{pam.upper().replace('N', '[ACGT]')}$")
+def analyze_sequence_for_score(seq: str, step: int = 1, pam_pattern: str = 'GG') -> float:
     total_lambda = 0.0
-    protospacer = seq[:20]
-    pam_seq_from_input = seq[20:23]
-    if not (len(pam_seq_from_input) == 3 and pam_re.fullmatch(pam_seq_from_input)):
-        return 0.0
-    for i in range(0, len(protospacer) - 5, step):
-        try:
-            c1 = codon_to_int(protospacer[i : i + 3])
-            c2 = codon_to_int(protospacer[i + 3 : i + 6])
-            N = c1 * 64 + c2
-            p, q = semiprime_factors(N)
-            total_lambda += fingerprint(p, q)
-        except (ValueError, TypeError):
-            continue
+    seq = seq.upper()
+    # Find every occurrence of the PAM (e.g., GG)
+    for m in re.finditer(f'(?=(.[ACGT]{pam_pattern}))', seq):
+        pam_index = m.start()
+        if pam_index < 20: continue # Need at least 20bp before the PAM
+        
+        protospacer = seq[pam_index-20:pam_index]
+        # Calculate resonance for this specific 20bp window
+        for i in range(0, len(protospacer) - 5, step):
+            try:
+                c1 = codon_to_int(protospacer[i : i + 3])
+                c2 = codon_to_int(protospacer[i + 3 : i + 6])
+                N = c1 * 64 + c2
+                p, q = semiprime_factors(N)
+                total_lambda += fingerprint(p, q)
+            except (ValueError, KeyError):
+                continue
     return total_lambda
-
-def run_validation(data_path: str, output_filename: str):
-    print(f"Loading dataset from {data_path}...")
-    try:
-        df = pd.read_csv(data_path)
-    except FileNotFoundError:
-        print(f"\nERROR: '{data_path}' not found.", file=sys.stderr)
-        sys.exit(1)
-
-    df.rename(columns={'Percent Peptide': 'Lab_Efficiency', 'predictions': 'Azimuth_Score'}, inplace=True)
-
-    if 'Lab_Efficiency' not in df.columns:
-        print("\nERROR: Could not find 'Lab_Efficiency' or 'Percent Peptide' column.", file=sys.stderr)
-        sys.exit(1)
-
-    df['Lab_Efficiency'] = pd.to_numeric(df['Lab_Efficiency'], errors='coerce')
-    if df['Lab_Efficiency'].max() > 1.5:
-        df['Lab_Efficiency'] = df['Lab_Efficiency'] / 100.0
-
-    print("Calculating Semiprime λ Scores...")
-    df['Aggregate_Lambda_Score'] = df['30mer'].apply(lambda x: analyze_sequence_for_score(str(x)[4:27].upper()))
-    print("Calculation complete.")
-
-    print(f"Generating plot and saving to {output_filename}...")
-    plt.figure(figsize=(12, 8))
-    plt.scatter(df['Aggregate_Lambda_Score'], df['Lab_Efficiency'], alpha=0.5)
-    plt.title('Semiprime λ Score vs. Lab Efficiency (Smoke Test)')
-    plt.xlabel('Aggregate Semiprime λ Score')
-    plt.ylabel('Actual Lab Efficiency (Normalized)')
-    plt.grid(True)
-    plt.savefig(output_filename)
-    print("Plot generated successfully.")
-    plt.close()
-
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        input_csv = sys.argv[1]
-        output_plot = "ci_smoke_test_plot.png"
-    else:
-        print("Usage: python analyze.py <path_to_csv>", file=sys.stderr)
-        sys.exit(1)
-
-    run_validation(input_csv, output_plot)
