@@ -1,0 +1,15 @@
+{
+    "AstraZeneca": {
+        "primary": "slave.petrovski@astrazeneca.com",
+        "cc": "rick.suarez@astrazeneca.com",
+        "dept": "Genomics Research"
+    },
+    "NexusGenomics": {
+        "primary": "billing@nexusgenomics.com",
+        "dept": "Finance"
+    },
+    "GoogleCloud": {
+        "primary": "thomas.kurian@google.com",
+        "dept": "Enterprise"
+    }
+}
