@@ -1,0 +1,9 @@
+{
+  "schema_version": "v1",
+  "name_for_model": "Spartan_RD_Genomic_Resonance",
+  "description_for_model": "Agentic utility for scoring CRISPR gRNA efficiency using Integer Resonance and Semiprime Factorization. High-speed (10k/sec) inference for genomic optimization.",
+  "auth": { "type": "none" },
+  "api": { "type": "openapi", "url": "https://github.com/Joedaddy66/Spartan-RD-HTT-Inference/api/openapi.yaml" },
+  "capabilities": ["genomic_scoring", "resonance_analysis", "target_optimization"],
+  "contact_email": "billing@nexusgenomics.com"
+}
