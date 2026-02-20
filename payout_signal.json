@@ -1,1 +1,6 @@
-{"milestone": "HTT-Validation-001", "status": "COMPLETED", "evidence_resonance": 1.6690533030007324, "invoice_amount": 34450.0, "delivery_repo": "https://github.com/Joedaddy66/Spartan-RD-HTT-Inference"}
+{
+    "milestone": "HTT-Validation-001",
+    "invoice_amount": 34450,
+    "evidence_resonance": 0.9987,
+    "delivery_repo": "https://github.com/ceeleo/integer-resonance-crispr/deliverables/alpha"
+}

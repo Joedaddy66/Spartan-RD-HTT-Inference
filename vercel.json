@@ -1,0 +1,10 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "CI=false npm run build",
+  "crons": [
+    {
+      "path": "/api/cron/hunt",
+      "schedule": "0 9 * * *"
+    }
+  ]
+}

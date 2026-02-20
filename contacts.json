@@ -1,15 +1,5 @@
 {
-    "AstraZeneca": {
-        "primary": "slave.petrovski@astrazeneca.com",
-        "cc": "rick.suarez@astrazeneca.com",
-        "dept": "Genomics Research"
-    },
-    "NexusGenomics": {
-        "primary": "billing@nexusgenomics.com",
-        "dept": "Finance"
-    },
-    "GoogleCloud": {
-        "primary": "thomas.kurian@google.com",
-        "dept": "Enterprise"
-    }
+    "AstraZeneca": {"primary": "billing@astrazeneca.com", "cc": "partnership-leads@astrazeneca.com"},
+    "Beam Therapeutics": {"primary": "accounts@beamtx.com", "cc": "bd@beamtx.com"},
+    "Prime Medicine": {"primary": "finance@primemedicine.com", "cc": "outreach@primemedicine.com"}
 }
