@@ -1,5 +1,2 @@
-pandas
-matplotlib
-sympy
 fastapi
 uvicorn
