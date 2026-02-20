@@ -1,12 +1,5 @@
 import sqlite3
 import os
-import stripe
-from dotenv import load_dotenv
-from google import genai
-
-load_dotenv()
-stripe.api_key = os.getenv("STRIPE_API_KEY")
-gemini_key = os.getenv("GEMINI_API_KEY")
 
 def execute_strike(target_name):
     conn = sqlite3.connect('nexus.db')
@@ -15,54 +8,24 @@ def execute_strike(target_name):
     row = c.fetchone()
     if not row: return
     
-    email, potential = row
+    email = row[0]
     
-    # 1. The Power Specs (Your AI Studio Metrics)
-    stats = {
-        "ingest": "1,000,000 Patients",
-        "precision": "1-in-875M Signature Identification",
-        "throughput": "166,400 records/sec",
-        "target": "HMN1 (Huntington's)"
-    }
+    # Live Infrastructure Links
+    dashboard_url = "https://integer-resonance-crispr-oc8grgr22-joseph-e-purvis-projects.vercel.app"
+    stripe_link = "https://buy.stripe.com/test_6oEbL00Xf9v090I3cc" # Placeholder for your live link
 
-    # 2. Stripe Hook ($34,450 Validation)
-    try:
-        product = stripe.Product.create(name=f"Project Lazarus: {target_name} Ingest")
-        price = stripe.Price.create(product=product.id, unit_amount=3445000, currency="usd")
-        checkout = stripe.PaymentLink.create(line_items=[{"price": price.id, "quantity": 1}])
-        payment_url = checkout.url
-    except:
-        payment_url = "[STRIPE_PAYMENT_LINK]"
-
-    # 3. The "Sovereign" Pitch
-    pitch = f"""
-SUBJECT: PRODUCTION LOG: 1-in-875M Variant Identified for {target_name}
-
-{email.split('@')[0]},
-
-Our R&D platform (REDTEAM-CRISPR-LOGIC) has successfully processed the 1M patient ingest. 
-
-We have isolated a 1-in-875M genetic signature relevant to your HMN1 targets. This was processed at a throughput of {stats['throughput']} with FIPS-140-2 level 3 cryptographic sealing.
-
-[MISSION CRITICAL DATA]
-System State: NOMINAL
-Validation Milestone: HTT-001
-Status: READY FOR HANDOFF
-
-To access the full identified variant map and the Azure-backed Project Lazarus dashboard, please clear the validation milestone of $34,450.00.
-
-LINK: {payment_url}
-
-Sovereignly,
-Joseph Purvis
-Project Lazarus Lead
-    """
+    if "Tune" in target_name:
+        subject = "Precision HBV Validation for Tune-401 — Congratulations on $175M Series B"
+        body = f"Derek,\n\nCongratulations on the momentum for the Tune-401 Hepatitis B program. Our Spartan RGA platform has isolated a 1-in-875M genetic resonance variant relevant to your HBV epigenetic silencing work.\n\nVIEW DASHBOARD: {dashboard_url}\nMILESTONE PAYMENT: {stripe_link}"
+    elif "Intellia" in target_name:
+        subject = "MAGNITUDE-2 Liver Safety — Pipeline Guardrails via 1M Patient Ingest"
+        body = f"Birgit,\n\nCongratulations on the FDA lift for MAGNITUDE-2. Our REDTEAM-CRISPR-LOGIC suite has ingested 1M patient records to identify off-target enzyme elevations—a liver safety guardrail ready for your Phase 3 resumption.\n\nVIEW DASHBOARD: {dashboard_url}\nMILESTONE PAYMENT: {stripe_link}"
     
-    print(pitch)
-    # Update DB
-    c.execute("UPDATE leads SET status='PITCHED' WHERE name=?", (target_name,))
-    conn.commit()
+    print(f"\n--- {target_name} DISPATCH ---")
+    print(f"To: {email}")
+    print(f"Subject: {subject}")
+    print(f"\n{body}\n")
 
 if __name__ == "__main__":
     import sys
-    execute_strike(sys.argv[1] if len(sys.argv) > 1 else "AstraZeneca")
+    execute_strike(sys.argv[1])
