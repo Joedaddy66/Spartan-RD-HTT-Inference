@@ -45,3 +45,5 @@ ENV/
 Thumbs.db
 .vercel
 .env*.local
+.env
+register_commands.py
